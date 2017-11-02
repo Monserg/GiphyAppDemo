@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3I2-CI-XQq">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Objects Show View Controller-->
+        <scene sceneID="lVd-AM-ZCr">
+            <objects>
+                <viewController storyboardIdentifier="GIFObjectsShowVC" id="OCS-Zh-IjI" customClass="GIFObjectsShowViewController" customModule="GiphyAppDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dYX-ME-fUc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="g6r-Ux-bYa">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="Oei-kk-WJs">
+                                    <size key="itemSize" width="150" height="150"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="dWG-pc-Pay" customClass="GIFCollectionViewCell" customModule="GiphyAppDemo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aj1-09-Cie">
+                                                    <rect key="frame" x="5" y="124" width="140" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="1" green="0.84313725490000002" blue="0.42352941179999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="Aj1-09-Cie" secondAttribute="bottom" constant="5" id="ZdI-mE-O7K"/>
+                                            <constraint firstItem="Aj1-09-Cie" firstAttribute="leading" secondItem="dWG-pc-Pay" secondAttribute="leading" constant="5" id="cAK-oT-Lnv"/>
+                                            <constraint firstItem="Aj1-09-Cie" firstAttribute="centerX" secondItem="dWG-pc-Pay" secondAttribute="centerX" id="f0y-fB-0Na"/>
+                                            <constraint firstAttribute="trailing" secondItem="Aj1-09-Cie" secondAttribute="trailing" constant="5" id="sSp-o2-d8q"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="importDateTimeLabel" destination="Aj1-09-Cie" id="7PH-gj-goA"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="g6r-Ux-bYa" firstAttribute="top" secondItem="Sh3-H8-fTW" secondAttribute="top" id="0rg-Fe-UE5"/>
+                            <constraint firstItem="g6r-Ux-bYa" firstAttribute="leading" secondItem="Sh3-H8-fTW" secondAttribute="leading" id="1dj-mS-9qR"/>
+                            <constraint firstItem="Sh3-H8-fTW" firstAttribute="trailing" secondItem="g6r-Ux-bYa" secondAttribute="trailing" id="SZJ-WS-vPA"/>
+                            <constraint firstItem="Sh3-H8-fTW" firstAttribute="bottom" secondItem="g6r-Ux-bYa" secondAttribute="bottom" id="sUx-qN-HNQ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Sh3-H8-fTW"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="xNS-cc-ake"/>
+                    <connections>
+                        <outlet property="collectionView" destination="g6r-Ux-bYa" id="ook-WU-yPx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b1I-8Q-yrc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="344.80000000000001" y="182.15892053973016"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="a3X-r5-oSs">
+            <objects>
+                <navigationController storyboardIdentifier="GIFObjectsShowNC" automaticallyAdjustsScrollViewInsets="NO" id="3I2-CI-XQq" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="B6Y-nt-TW2">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="OCS-Zh-IjI" kind="relationship" relationship="rootViewController" id="Kfr-x8-nRb"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0v3-9A-JfE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-442" y="182"/>
+        </scene>
+    </scenes>
+</document>
