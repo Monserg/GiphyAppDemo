@@ -36,7 +36,9 @@ class GIFObjectsShowInteractor: GIFObjectsShowBusinessLogic, GIFObjectsShowDataS
         let url = worker?.createURL(withParameterQ: requestModel.parameterQ, andParameterOffset: requestModel.parameterOffset)
         print(url!)
         
-        let responseModel = GIFObjectsShowModels.FetchGIFObjects.ResponseModel()
-        presenter?.presentSomething(response: responseModel)
+        worker?.fetchGIFObjects(witURL: url!, completionHandler: { (objectsGIF) in
+            let responseModel = GIFObjectsShowModels.FetchGIFObjects.ResponseModel()
+            self.presenter?.presentSomething(response: responseModel)
+        })
     }
 }

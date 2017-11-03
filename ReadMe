@@ -14,4 +14,5 @@ http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=YOUR_API_KEY
 6. add CoreData model
 7. add URLComponents
 8. add Reachability
-9. 
+9. add decode response JSON
+10. create models

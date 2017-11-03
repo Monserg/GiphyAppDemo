@@ -124,11 +124,7 @@ class GIFObjectsShowViewController: UIViewController {
     }
 
     func loadData() {
-        if !Connectivity.isNetworkAvailable() {
-            alertViewDidShow(withTitle: NSLocalizedString("Info", comment: "Reachable info title"),
-                             andMessage: NSLocalizedString("Network not reachadle", comment: "Reachable info message"),
-                             completion: {})
-        }
+
     }
 }
 

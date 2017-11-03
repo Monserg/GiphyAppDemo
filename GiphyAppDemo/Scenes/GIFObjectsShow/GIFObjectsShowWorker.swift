@@ -16,23 +16,44 @@ class GIFObjectsShowWorker {
     // MARK: - Business Logic
     func createURL(withParameterQ parameterQ: String?, andParameterOffset parameterOffset: Int) -> URL {
         let components = NSURLComponents()
-        let paginationLimit = 12
+        let paginationLimit = 5
         components.scheme = "http"
         components.host = "api.giphy.com"
         components.path = "/v1/gifs/search"
 
-        if let q = parameterQ {
-            components.queryItems?.append(URLQueryItem(name: "q", value: q))
-        }
+//        if let q = parameterQ {
+//            components.queryItems?.append(URLQueryItem(name: "q", value: "ocean"))
+//        }
+//
+//        components.queryItems?.append(NSURLQueryItem(name: "limit", value: "\(paginationLimit)") as URLQueryItem)
+//        components.queryItems?.append(NSURLQueryItem(name: "offset", value: "\(parameterOffset)") as URLQueryItem)
+//        components.queryItems?.append(NSURLQueryItem(name: "api_key", value: "ENGmeWFYfqEeCO7iCKKt0MIvPBcSd9Rm") as URLQueryItem)
+
         
-        components.queryItems?.append(URLQueryItem(name: "limit", value: "\(paginationLimit)"))
-        components.queryItems?.append(URLQueryItem(name: "offset", value: "\(parameterOffset)"))
-        components.queryItems?.append(URLQueryItem(name: "api_key", value: "ENGmeWFYfqEeCO7iCKKt0MIvPBcSd9Rm"))
+        let itemQ       =   URLQueryItem(name: "q", value: "ocean")
+        let itemLimit   =   URLQueryItem(name: "limit", value: "\(paginationLimit)")
+        let itemOffset  =   URLQueryItem(name: "offset", value: "\(parameterOffset)")
+        let itemKeyAPI  =   URLQueryItem(name: "api_key", value: "ENGmeWFYfqEeCO7iCKKt0MIvPBcSd9Rm")
+        
+        components.queryItems = [itemQ, itemLimit, itemOffset, itemKeyAPI]
 
         return components.url!
     }
 
-    func doSomeWork() {
+    func fetchGIFObjects(witURL url: URL, completionHandler: @escaping ([String]?) -> Void) {
+        URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+            do {
+                let responseObject = try JSONDecoder().decode(ResponseObject.self, from: data!)
+                print(responseObject)
+                
+                
+//                for objectGIF in responseObject.data {
+//                    print(objectGIF)
+//                }
+            } catch {
+                print("Error")
+            }
+        }).resume()
     }
 }
 
