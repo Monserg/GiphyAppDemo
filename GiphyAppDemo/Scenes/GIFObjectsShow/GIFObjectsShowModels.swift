@@ -15,8 +15,10 @@ import UIKit
 // MARK: - Data models
 enum GIFObjectsShowModels {
     // MARK: - Use cases
-    enum Something {
+    enum FetchGIFObjects {
         struct RequestModel {
+            let parameterQ: String?
+            let parameterOffset: Int
         }
         
         struct ResponseModel {

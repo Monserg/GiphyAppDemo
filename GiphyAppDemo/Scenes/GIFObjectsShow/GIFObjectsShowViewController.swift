@@ -14,7 +14,7 @@ import UIKit
 
 // MARK: - Input & Output protocols
 protocol GIFObjectsShowDisplayLogic: class {
-    func displaySomething(viewModel: GIFObjectsShowModels.Something.ViewModel)
+    func displayFetchGIFObjects(fromViewModel viewModel: GIFObjectsShowModels.FetchGIFObjects.ViewModel)
 }
 
 class GIFObjectsShowViewController: UIViewController {
@@ -29,6 +29,9 @@ class GIFObjectsShowViewController: UIViewController {
     var filtered: [String] = []
     var searchActive: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
+    
+    // Pagination (0 - to start & clean datasource)
+    var paginationOffset = 0
     
     
     // MARK: - IBOutlets
@@ -56,10 +59,10 @@ class GIFObjectsShowViewController: UIViewController {
     
     // MARK: - Setup
     private func setup() {
-        let viewController  =   self
-        let interactor      =   GIFObjectsShowInteractor()
-        let presenter       =   GIFObjectsShowPresenter()
-        let router          =   GIFObjectsShowRouter()
+        let viewController          =   self
+        let interactor              =   GIFObjectsShowInteractor()
+        let presenter               =   GIFObjectsShowPresenter()
+        let router                  =   GIFObjectsShowRouter()
         
         viewController.interactor   =   interactor
         viewController.router       =   router
@@ -87,7 +90,7 @@ class GIFObjectsShowViewController: UIViewController {
         super.viewDidLoad()
         
         searchControllerCreate()
-        viewSettingsDidLoad()
+        fetchGIFObjects()
     }
     
     
@@ -105,14 +108,27 @@ class GIFObjectsShowViewController: UIViewController {
         searchController.searchBar.becomeFirstResponder()
         
         navigationItem.titleView = searchController.searchBar
-//
-//        navigationItem.searchController = searchController
         definesPresentationContext = true
     }
     
-    func viewSettingsDidLoad() {
-        let requestModel = GIFObjectsShowModels.Something.RequestModel()        
-        interactor?.doSomething(request: requestModel)
+    func fetchGIFObjects() {
+        paginationOffset = items.count + 1
+
+        guard Connectivity.isNetworkAvailable() else {
+            loadData()
+            return
+        }
+        
+        let requestModel = GIFObjectsShowModels.FetchGIFObjects.RequestModel(parameterQ: searchController.searchBar.text, parameterOffset: paginationOffset)
+        interactor?.fetchGIFObjects(withRequestModel: requestModel)
+    }
+
+    func loadData() {
+        if !Connectivity.isNetworkAvailable() {
+            alertViewDidShow(withTitle: NSLocalizedString("Info", comment: "Reachable info title"),
+                             andMessage: NSLocalizedString("Network not reachadle", comment: "Reachable info message"),
+                             completion: {})
+        }
     }
 }
 
@@ -210,8 +226,8 @@ extension GIFObjectsShowViewController: UISearchResultsUpdating {
 
 // MARK: - GIFObjectsShowDisplayLogic
 extension GIFObjectsShowViewController: GIFObjectsShowDisplayLogic {
-    func displaySomething(viewModel: GIFObjectsShowModels.Something.ViewModel) {
+    func displayFetchGIFObjects(fromViewModel viewModel: GIFObjectsShowModels.FetchGIFObjects.ViewModel) {
         // NOTE: Display the result from the Presenter
-        // nameTextField.text = viewModel.name
+
     }
 }

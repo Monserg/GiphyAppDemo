@@ -9,3 +9,9 @@ http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=YOUR_API_KEY
 1. create GIFObjectsShow VIP-cycle
 2. create GIFObjectsShow storyboard
 3. add search
+4. add Cocoapods
+5. create route & pass data between scenes
+6. add CoreData model
+7. add URLComponents
+8. add Reachability
+9. 

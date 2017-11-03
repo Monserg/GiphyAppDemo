@@ -14,6 +14,25 @@ import UIKit
 
 class GIFObjectsShowWorker {
     // MARK: - Business Logic
+    func createURL(withParameterQ parameterQ: String?, andParameterOffset parameterOffset: Int) -> URL {
+        let components = NSURLComponents()
+        let paginationLimit = 12
+        components.scheme = "http"
+        components.host = "api.giphy.com"
+        components.path = "/v1/gifs/search"
+
+        if let q = parameterQ {
+            components.queryItems?.append(URLQueryItem(name: "q", value: q))
+        }
+        
+        components.queryItems?.append(URLQueryItem(name: "limit", value: "\(paginationLimit)"))
+        components.queryItems?.append(URLQueryItem(name: "offset", value: "\(parameterOffset)"))
+        components.queryItems?.append(URLQueryItem(name: "api_key", value: "ENGmeWFYfqEeCO7iCKKt0MIvPBcSd9Rm"))
+
+        return components.url!
+    }
+
     func doSomeWork() {
     }
 }
+

@@ -14,7 +14,7 @@ import UIKit
 
 // MARK: - Presentation Logic protocols
 protocol GIFObjectsShowPresentationLogic {
-    func presentSomething(response: GIFObjectsShowModels.Something.ResponseModel)
+    func presentSomething(response: GIFObjectsShowModels.FetchGIFObjects.ResponseModel)
 }
 
 class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
@@ -23,8 +23,8 @@ class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
     
     
     // MARK: - Presentation Logic implementation
-    func presentSomething(response: GIFObjectsShowModels.Something.ResponseModel) {
-        let viewModel = GIFObjectsShowModels.Something.ViewModel()
-        viewController?.displaySomething(viewModel: viewModel)
+    func presentSomething(response: GIFObjectsShowModels.FetchGIFObjects.ResponseModel) {
+        let viewModel = GIFObjectsShowModels.FetchGIFObjects.ViewModel()
+        viewController?.displayFetchGIFObjects(fromViewModel: viewModel)
     }
 }

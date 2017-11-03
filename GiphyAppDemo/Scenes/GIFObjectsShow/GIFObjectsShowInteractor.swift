@@ -14,7 +14,7 @@ import UIKit
 
 // MARK: - Business Logic protocols
 protocol GIFObjectsShowBusinessLogic {
-    func doSomething(request: GIFObjectsShowModels.Something.RequestModel)
+    func fetchGIFObjects(withRequestModel requestModel: GIFObjectsShowModels.FetchGIFObjects.RequestModel)
 }
 
 protocol GIFObjectsShowDataStore {
@@ -30,11 +30,13 @@ class GIFObjectsShowInteractor: GIFObjectsShowBusinessLogic, GIFObjectsShowDataS
     
     
     // MARK: - Business logic implementation
-    func doSomething(request: GIFObjectsShowModels.Something.RequestModel) {
+    func fetchGIFObjects(withRequestModel requestModel: GIFObjectsShowModels.FetchGIFObjects.RequestModel) {
         worker = GIFObjectsShowWorker()
-        worker?.doSomeWork()
         
-        let responseModel = GIFObjectsShowModels.Something.ResponseModel()
+        let url = worker?.createURL(withParameterQ: requestModel.parameterQ, andParameterOffset: requestModel.parameterOffset)
+        print(url!)
+        
+        let responseModel = GIFObjectsShowModels.FetchGIFObjects.ResponseModel()
         presenter?.presentSomething(response: responseModel)
     }
 }
