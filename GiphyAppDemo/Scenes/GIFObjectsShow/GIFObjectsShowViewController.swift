@@ -23,8 +23,8 @@ class GIFObjectsShowViewController: UIViewController {
     var router: (NSObjectProtocol & GIFObjectsShowRoutingLogic & GIFObjectsShowDataPassing)?
     
     // Data source
-    var items = ["San Francisco","New York","San Jose","Chicago","Los Angeles","Austin","Seattle"]
-    
+    var items: [GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject] = []
+
     // Search
     var filtered: [String] = []
     var searchActive: Bool = false
@@ -41,6 +41,8 @@ class GIFObjectsShowViewController: UIViewController {
             collectionView.dataSource = self
         }
     }
+    
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     
     // MARK: - Object lifecycle
@@ -61,7 +63,7 @@ class GIFObjectsShowViewController: UIViewController {
     private func setup() {
         let viewController          =   self
         let interactor              =   GIFObjectsShowInteractor()
-        let presenter               =   GIFObjectsShowPresenter()
+        let presenter               =   GIFObjectsShowPresenter(coreDataManager: CoreDataManager.instance)
         let router                  =   GIFObjectsShowRouter()
         
         viewController.interactor   =   interactor
@@ -112,6 +114,7 @@ class GIFObjectsShowViewController: UIViewController {
     }
     
     func fetchGIFObjects() {
+        spinner.startAnimating()
         paginationOffset = items.count + 1
 
         guard Connectivity.isNetworkAvailable() else {
@@ -119,8 +122,16 @@ class GIFObjectsShowViewController: UIViewController {
             return
         }
         
-        let requestModel = GIFObjectsShowModels.FetchGIFObjects.RequestModel(parameterQ: searchController.searchBar.text, parameterOffset: paginationOffset)
-        interactor?.fetchGIFObjects(withRequestModel: requestModel)
+        DispatchQueue.main.async {
+            Thread.sleep(forTimeInterval: 0.5)
+            
+            OperationQueue.main.addOperation() {
+                self.view.isUserInteractionEnabled = false
+                let requestModel = GIFObjectsShowModels.FetchGIFObjects.RequestModel(parameterQ: self.searchController.searchBar.text,
+                                                                                     parameterOffset: self.paginationOffset)
+                self.interactor?.fetchGIFObjects(withRequestModel: requestModel)
+            }
+        }
     }
 
     func loadData() {
@@ -146,7 +157,7 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
         
         //configureCell(cell: cell as! toolCollectionViewCell, forItemAtIndexPath: indexPath as NSIndexPath)
         
-        cell.importDateTimeLabel.text = items[indexPath.row]
+        cell.importDateTimeLabel.text = items[indexPath.row].username
         
         return cell
     }
@@ -163,10 +174,30 @@ extension GIFObjectsShowViewController: UICollectionViewDelegate {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension GIFObjectsShowViewController: UICollectionViewDelegateFlowLayout {
+    // Cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = (collectionView.frame.width - 8.0) / 2
         
         return CGSize.init(width: cellWidth, height: cellWidth)
+    }
+    
+    // Header
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return (items.count == 0) ? CGSize.init(width: collectionView.frame.width, height: collectionView.frame.height) : .zero
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionElementKindSectionHeader:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                             withReuseIdentifier: "Header",
+                                                                             for: indexPath)
+            
+            return headerView
+            
+        default:
+            assert(false, NSLocalizedString("Unexpected element kind", comment: "Collection cell kind error`"))
+        }
     }
 }
 
@@ -176,10 +207,10 @@ extension GIFObjectsShowViewController: UISearchControllerDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         let searchString = searchController.searchBar.text
         
-        filtered = items.filter({ (item) -> Bool in
-            let countryText: NSString = item as NSString
-            return (countryText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
-        })
+//        filtered = items.filter({ (item) -> Bool in
+//            let countryText: NSString = item as NSString
+//            return (countryText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
+//        })
         
         collectionView.reloadData()
     }
@@ -200,7 +231,7 @@ extension GIFObjectsShowViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
-        collectionView.reloadData()
+        fetchGIFObjects()
     }
 
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
@@ -224,6 +255,11 @@ extension GIFObjectsShowViewController: UISearchResultsUpdating {
 extension GIFObjectsShowViewController: GIFObjectsShowDisplayLogic {
     func displayFetchGIFObjects(fromViewModel viewModel: GIFObjectsShowModels.FetchGIFObjects.ViewModel) {
         // NOTE: Display the result from the Presenter
-
+//        items = viewModel.displayedGIFObjects
+        
+        OperationQueue.main.addOperation() {
+            self.collectionView.reloadData()
+            self.spinner.stopAnimating()
+        }
     }
 }

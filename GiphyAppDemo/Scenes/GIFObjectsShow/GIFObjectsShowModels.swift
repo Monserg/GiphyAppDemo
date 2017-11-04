@@ -22,9 +22,17 @@ enum GIFObjectsShowModels {
         }
         
         struct ResponseModel {
+            let responseObject: ResponseObject
         }
         
         struct ViewModel {
+            struct DisplayedGIFObject {
+                let id: String
+                let username: String?
+                let url: String
+            }
+            
+            let displayedGIFObjects: [DisplayedGIFObject]?
         }
     }
 }

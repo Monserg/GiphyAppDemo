@@ -6,9 +6,15 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="AmericanTypewriter.ttc">
+            <string>AmericanTypewriter</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Objects Show View Controller-->
         <scene sceneID="lVd-AM-ZCr">
@@ -23,13 +29,13 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="Oei-kk-WJs">
                                     <size key="itemSize" width="150" height="150"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="dWG-pc-Pay" customClass="GIFCollectionViewCell" customModule="GiphyAppDemo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                        <rect key="frame" x="0.0" y="50" width="150" height="150"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
@@ -55,13 +61,35 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="Header" id="IhV-8w-1CY">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collection is empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BNk-QG-Yob">
+                                            <rect key="frame" x="96.5" y="13.5" width="181.5" height="23.5"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="BNk-QG-Yob" firstAttribute="centerY" secondItem="IhV-8w-1CY" secondAttribute="centerY" id="Koa-t6-NP7"/>
+                                        <constraint firstItem="BNk-QG-Yob" firstAttribute="centerX" secondItem="IhV-8w-1CY" secondAttribute="centerX" id="X8O-ku-Bdb"/>
+                                    </constraints>
+                                </collectionReusableView>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AfW-Dn-3VZ">
+                                <rect key="frame" x="169.5" y="313" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="g6r-Ux-bYa" firstAttribute="top" secondItem="Sh3-H8-fTW" secondAttribute="top" id="0rg-Fe-UE5"/>
                             <constraint firstItem="g6r-Ux-bYa" firstAttribute="leading" secondItem="Sh3-H8-fTW" secondAttribute="leading" id="1dj-mS-9qR"/>
                             <constraint firstItem="Sh3-H8-fTW" firstAttribute="trailing" secondItem="g6r-Ux-bYa" secondAttribute="trailing" id="SZJ-WS-vPA"/>
+                            <constraint firstItem="AfW-Dn-3VZ" firstAttribute="centerX" secondItem="dYX-ME-fUc" secondAttribute="centerX" id="ezz-eB-TaT"/>
+                            <constraint firstItem="AfW-Dn-3VZ" firstAttribute="centerY" secondItem="dYX-ME-fUc" secondAttribute="centerY" multiplier="1.1" id="nAr-E2-K3c"/>
                             <constraint firstItem="Sh3-H8-fTW" firstAttribute="bottom" secondItem="g6r-Ux-bYa" secondAttribute="bottom" id="sUx-qN-HNQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Sh3-H8-fTW"/>
@@ -70,6 +98,7 @@
                     <navigationItem key="navigationItem" id="xNS-cc-ake"/>
                     <connections>
                         <outlet property="collectionView" destination="g6r-Ux-bYa" id="ook-WU-yPx"/>
+                        <outlet property="spinner" destination="AfW-Dn-3VZ" id="dqU-ih-HRQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b1I-8Q-yrc" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -21,16 +21,7 @@ class GIFObjectsShowWorker {
         components.host = "api.giphy.com"
         components.path = "/v1/gifs/search"
 
-//        if let q = parameterQ {
-//            components.queryItems?.append(URLQueryItem(name: "q", value: "ocean"))
-//        }
-//
-//        components.queryItems?.append(NSURLQueryItem(name: "limit", value: "\(paginationLimit)") as URLQueryItem)
-//        components.queryItems?.append(NSURLQueryItem(name: "offset", value: "\(parameterOffset)") as URLQueryItem)
-//        components.queryItems?.append(NSURLQueryItem(name: "api_key", value: "ENGmeWFYfqEeCO7iCKKt0MIvPBcSd9Rm") as URLQueryItem)
-
-        
-        let itemQ       =   URLQueryItem(name: "q", value: "ocean")
+        let itemQ       =   URLQueryItem(name: "q", value: parameterQ)
         let itemLimit   =   URLQueryItem(name: "limit", value: "\(paginationLimit)")
         let itemOffset  =   URLQueryItem(name: "offset", value: "\(parameterOffset)")
         let itemKeyAPI  =   URLQueryItem(name: "api_key", value: "ENGmeWFYfqEeCO7iCKKt0MIvPBcSd9Rm")
@@ -40,18 +31,13 @@ class GIFObjectsShowWorker {
         return components.url!
     }
 
-    func fetchGIFObjects(witURL url: URL, completionHandler: @escaping ([String]?) -> Void) {
+    func fetchGIFObjects(witURL url: URL, completionHandler: @escaping (ResponseObject?) -> Void) {
         URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             do {
                 let responseObject = try JSONDecoder().decode(ResponseObject.self, from: data!)
-                print(responseObject)
-                
-                
-//                for objectGIF in responseObject.data {
-//                    print(objectGIF)
-//                }
+                completionHandler(responseObject)
             } catch {
-                print("Error")
+                completionHandler(nil)
             }
         }).resume()
     }

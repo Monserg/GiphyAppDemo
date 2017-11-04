@@ -14,17 +14,40 @@ import UIKit
 
 // MARK: - Presentation Logic protocols
 protocol GIFObjectsShowPresentationLogic {
-    func presentSomething(response: GIFObjectsShowModels.FetchGIFObjects.ResponseModel)
+    func presentGIFObjects(fromResponseModel responseModel: GIFObjectsShowModels.FetchGIFObjects.ResponseModel)
 }
 
 class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
     // MARK: - Properties
     weak var viewController: GIFObjectsShowDisplayLogic?
     
+    // Dependency Injection
+    let coreDataManager: CoreDataManager
     
+    init(coreDataManager: CoreDataManager) {
+        self.coreDataManager = coreDataManager
+    }
+    
+
     // MARK: - Presentation Logic implementation
-    func presentSomething(response: GIFObjectsShowModels.FetchGIFObjects.ResponseModel) {
-        let viewModel = GIFObjectsShowModels.FetchGIFObjects.ViewModel()
+    func presentGIFObjects(fromResponseModel responseModel: GIFObjectsShowModels.FetchGIFObjects.ResponseModel) {
+        var objects: [GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject] = []
+
+        for objectGIF in responseModel.responseObject.data {
+            let object = GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject.init(id: objectGIF.id,
+                                                                                                username: objectGIF.username,
+                                                                                                url: objectGIF.url)
+            
+            objects.append(object)
+        }
+        
+        // Save data to CoreData
+//        coreDataManager.objectsGIFSave(fromData: NSKeyedArchiver.archivedData(withRootObject: objects))
+
+        // Read data from CoreData
+        let objectsGIF = coreDataManager.objectsGIFRead()
+        
+        let viewModel = GIFObjectsShowModels.FetchGIFObjects.ViewModel(displayedGIFObjects: objectsGIF)
         viewController?.displayFetchGIFObjects(fromViewModel: viewModel)
     }
 }

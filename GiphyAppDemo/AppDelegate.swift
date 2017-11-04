@@ -20,6 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Fabric run.
         Fabric.with([Crashlytics.self])
 
+        // Get CoreData path
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print(urls[urls.count - 1] as URL)
+
         return true
     }
 
