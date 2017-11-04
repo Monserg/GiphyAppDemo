@@ -25,6 +25,8 @@ class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
     // Dependency Injection
     let coreDataManager: CoreDataManager
     
+    
+    // MARK: - Class Initialization
     init(coreDataManager: CoreDataManager) {
         self.coreDataManager = coreDataManager
     }

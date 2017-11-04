@@ -22,7 +22,7 @@ protocol GIFObjectsShowDisplayLogic: class {
     func displayFetchGIFObjects(fromViewModel viewModel: GIFObjectsShowModels.FetchGIFObjects.ViewModel)
 }
 
-let paginationLimit = 15
+let paginationLimit = 14
 
 class GIFObjectsShowViewController: UIViewController {
     // MARK: - Properties
@@ -73,7 +73,7 @@ class GIFObjectsShowViewController: UIViewController {
     // MARK: - Setup
     private func setup() {
         let viewController          =   self
-        let interactor              =   GIFObjectsShowInteractor()
+        let interactor              =   GIFObjectsShowInteractor(coreDataManager: CoreDataManager.instance)
         let presenter               =   GIFObjectsShowPresenter(coreDataManager: CoreDataManager.instance)
         let router                  =   GIFObjectsShowRouter()
         
@@ -192,15 +192,21 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
         if let imageURL = objectGIF.fixed_width {
             print("\(indexPath.row). \(imageURL)")
             
-            cell.imageView.kf.setImage(with: URL(string: imageURL)!,
-                                  placeholder: nil,
-                                  options: [.transition(ImageTransition.fade(1)), .cacheOriginalImage,
-                                            .processor(ResizingImageProcessor(referenceSize: cell.imageView.frame.size,
-                                                                              mode: .aspectFill))],
-                                  completionHandler: { image, error, cacheType, imageURL in
-                                    cell.imageView.kf.cancelDownloadTask()
-                                    cell.spinner.stopAnimating()
-            })
+            DispatchQueue.main.async {
+                Thread.sleep(forTimeInterval: 0.005)
+                
+                OperationQueue.main.addOperation() {
+                    cell.imageView.kf.setImage(with: URL(string: imageURL)!,
+                                               placeholder: nil,
+                                               options: [.transition(ImageTransition.fade(1)), .cacheOriginalImage,
+                                                         .processor(ResizingImageProcessor(referenceSize: cell.imageView.frame.size,
+                                                                                           mode: .aspectFill))],
+                                               completionHandler: { image, error, cacheType, imageURL in
+                                                cell.imageView.kf.cancelDownloadTask()
+                                                cell.spinner.stopAnimating()
+                    })
+                }
+            }
         } else {
             cell.imageView.image = UIImage.init(named: "no-image-3")
             cell.spinner.stopAnimating()
@@ -260,12 +266,12 @@ extension GIFObjectsShowViewController: UICollectionViewDelegateFlowLayout {
 extension GIFObjectsShowViewController: UISearchControllerDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         let searchString = searchController.searchBar.text
-        
+
         if let items = objectsGIF {
             filtered = items.filter({ (item) -> Bool in
-                let countryText: NSString = item.slug as NSString
+                let searchText: NSString = item.searchText as NSString
                 
-                return (countryText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
+                return (searchText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
             })
             
             collectionView.reloadData()

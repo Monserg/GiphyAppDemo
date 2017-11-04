@@ -29,9 +29,21 @@ class GIFObjectsShowInteractor: GIFObjectsShowBusinessLogic, GIFObjectsShowDataS
 
     var objectsGIF: [ObjectGIF]?
     
+    // Dependency Injection
+    let coreDataManager: CoreDataManager
+    
+
+    // MARK: - Class Initialization
+    init(coreDataManager: CoreDataManager) {
+        self.coreDataManager = coreDataManager
+    }
+
     
     // MARK: - Business logic implementation
     func loadObjectsGIF(withRequestModel requestModel: GIFObjectsShowModels.LoadObjectsGIF.RequestModel) {
+        // CoreData CRUD: read
+        objectsGIF = coreDataManager.entitiesRead(withPredicateParameters: nil)
+
         let responseModel = GIFObjectsShowModels.LoadObjectsGIF.ResponseModel(objectsCount: requestModel.objectsCount)
         presenter?.presentObjectsGIF(fromResponseModel: responseModel)
     }
