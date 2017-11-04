@@ -117,8 +117,6 @@ class CoreDataManager {
             let results = try managedObjectContext.fetch(fetchRequest)
             let entityObjectGIF = (results.count == 0) ? entityCreate() : results.first as! ObjectGIF
             entityObjectGIF.id = object.id
-            
-//            contextSave()
         } catch {
             print(error)
         }

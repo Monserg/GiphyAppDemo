@@ -16,7 +16,6 @@ class GIFObjectsShowWorker {
     // MARK: - Business Logic
     func createURL(withParameterQ parameterQ: String?, andParameterOffset parameterOffset: Int) -> URL {
         let components = NSURLComponents()
-        let paginationLimit = 5
         components.scheme = "http"
         components.host = "api.giphy.com"
         components.path = "/v1/gifs/search"

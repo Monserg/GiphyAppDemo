@@ -35,4 +35,18 @@ enum GIFObjectsShowModels {
             let displayedGIFObjects: [ObjectGIF]?
         }
     }
+    
+    enum LoadObjectsGIF {
+        struct RequestModel {
+            let objectsCount: Int
+        }
+        
+        struct ResponseModel {
+            let objectsCount: Int
+        }
+        
+        struct ViewModel {
+            let displayedGIFObjects: [ObjectGIF]?
+        }
+    }
 }

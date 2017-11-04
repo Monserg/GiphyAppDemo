@@ -14,6 +14,7 @@ import UIKit
 
 // MARK: - Presentation Logic protocols
 protocol GIFObjectsShowPresentationLogic {
+    func presentObjectsGIF(fromResponseModel responseModel: GIFObjectsShowModels.LoadObjectsGIF.ResponseModel)
     func presentGIFObjects(fromResponseModel responseModel: GIFObjectsShowModels.FetchGIFObjects.ResponseModel)
 }
 
@@ -30,6 +31,18 @@ class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
     
 
     // MARK: - Presentation Logic implementation
+    func presentObjectsGIF(fromResponseModel responseModel: GIFObjectsShowModels.LoadObjectsGIF.ResponseModel) {
+        // CoreData CRUD: read
+        var objectsGIF = coreDataManager.entitiesRead(withPredicateParameters: nil)
+        
+        if objectsGIF != nil {
+            objectsGIF = Array(objectsGIF!.prefix(responseModel.objectsCount + paginationLimit))
+        }
+        
+        let viewModel = GIFObjectsShowModels.LoadObjectsGIF.ViewModel(displayedGIFObjects: objectsGIF)
+        viewController?.displayLoadObjectsGIF(fromViewModel: viewModel)
+    }
+
     func presentGIFObjects(fromResponseModel responseModel: GIFObjectsShowModels.FetchGIFObjects.ResponseModel) {
         var ids: [String]?
         var predicate: NSPredicate?

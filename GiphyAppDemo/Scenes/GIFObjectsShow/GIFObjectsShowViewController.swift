@@ -14,8 +14,14 @@ import UIKit
 
 // MARK: - Input & Output protocols
 protocol GIFObjectsShowDisplayLogic: class {
+    // From CoreData
+    func displayLoadObjectsGIF(fromViewModel viewModel: GIFObjectsShowModels.LoadObjectsGIF.ViewModel)
+    
+    // From Server
     func displayFetchGIFObjects(fromViewModel viewModel: GIFObjectsShowModels.FetchGIFObjects.ViewModel)
 }
+
+let paginationLimit = 15
 
 class GIFObjectsShowViewController: UIViewController {
     // MARK: - Properties
@@ -23,7 +29,7 @@ class GIFObjectsShowViewController: UIViewController {
     var router: (NSObjectProtocol & GIFObjectsShowRoutingLogic & GIFObjectsShowDataPassing)?
     
     // Data source
-    var items: [GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject] = []
+    var objectsGIF: [ObjectGIF]?
 
     // Search
     var filtered: [String] = []
@@ -92,7 +98,8 @@ class GIFObjectsShowViewController: UIViewController {
         super.viewDidLoad()
         
         searchControllerCreate()
-        fetchGIFObjects()
+        loadObjectsGIF()
+//        fetchGIFObjects()
     }
     
     
@@ -115,10 +122,10 @@ class GIFObjectsShowViewController: UIViewController {
     
     func fetchGIFObjects() {
         spinner.startAnimating()
-        paginationOffset = items.count + 1
+        paginationOffset = objectsGIF == nil ? 0 : objectsGIF!.count + 1
 
         guard Connectivity.isNetworkAvailable() else {
-            loadData()
+            loadObjectsGIF()
             return
         }
         
@@ -134,8 +141,29 @@ class GIFObjectsShowViewController: UIViewController {
         }
     }
 
-    func loadData() {
-
+    func loadObjectsGIF() {
+        spinner.startAnimating()
+        
+        DispatchQueue.main.async {
+            Thread.sleep(forTimeInterval: 0.5)
+            
+            OperationQueue.main.addOperation() {
+                self.view.isUserInteractionEnabled = false
+                
+                let requestModel = GIFObjectsShowModels.LoadObjectsGIF.RequestModel(objectsCount: self.objectsGIF == nil ? 0 : self.objectsGIF!.count)
+                self.interactor?.loadObjectsGIF(withRequestModel: requestModel)
+            }
+        }
+    }
+    
+    func refreshObjectsGIF(fromArray objects: [ObjectGIF]?) {
+        objectsGIF = objects
+        
+        OperationQueue.main.addOperation() {
+            self.collectionView.reloadData()
+            self.spinner.stopAnimating()
+            self.view.isUserInteractionEnabled = true
+        }
     }
 }
 
@@ -148,7 +176,7 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
             return filtered.count
 
         default:
-            return items.count
+            return objectsGIF == nil ? 0 : objectsGIF!.count
         }
     }
     
@@ -157,7 +185,7 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
         
         //configureCell(cell: cell as! toolCollectionViewCell, forItemAtIndexPath: indexPath as NSIndexPath)
         
-        cell.importDateTimeLabel.text = items[indexPath.row].username
+        cell.importDateTimeLabel.text = objectsGIF![indexPath.row].id
         
         return cell
     }
@@ -168,6 +196,13 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
 extension GIFObjectsShowViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         router?.routeToGIFObjectShow()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == objectsGIF!.count - 2 && objectsGIF!.count % paginationLimit == 0 {
+            print("HELLO SERGEY!!!")
+            loadObjectsGIF()
+        }
     }
 }
 
@@ -183,7 +218,7 @@ extension GIFObjectsShowViewController: UICollectionViewDelegateFlowLayout {
     
     // Header
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return (items.count == 0) ? CGSize.init(width: collectionView.frame.width, height: collectionView.frame.height) : .zero
+        return (objectsGIF?.count == 0) ? CGSize.init(width: collectionView.frame.width, height: collectionView.frame.height) : .zero
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -253,13 +288,15 @@ extension GIFObjectsShowViewController: UISearchResultsUpdating {
 
 // MARK: - GIFObjectsShowDisplayLogic
 extension GIFObjectsShowViewController: GIFObjectsShowDisplayLogic {
+    // From CoreData
+    func displayLoadObjectsGIF(fromViewModel viewModel: GIFObjectsShowModels.LoadObjectsGIF.ViewModel) {
+        // NOTE: Display the result from the Presenter
+        refreshObjectsGIF(fromArray: viewModel.displayedGIFObjects)
+    }
+
+    // From Server
     func displayFetchGIFObjects(fromViewModel viewModel: GIFObjectsShowModels.FetchGIFObjects.ViewModel) {
         // NOTE: Display the result from the Presenter
-//        items = viewModel.displayedGIFObjects
-        
-        OperationQueue.main.addOperation() {
-            self.collectionView.reloadData()
-            self.spinner.stopAnimating()
-        }
+        refreshObjectsGIF(fromArray: viewModel.displayedGIFObjects)
     }
 }
