@@ -32,8 +32,20 @@ class GIFObjectsShowInteractor: GIFObjectsShowBusinessLogic, GIFObjectsShowDataS
     // MARK: - Business logic implementation
     func fetchGIFObjects(withRequestModel requestModel: GIFObjectsShowModels.FetchGIFObjects.RequestModel) {
         worker = GIFObjectsShowWorker()
+        var parameterQ: String = ""
+        let parametersQ = requestModel.parameterQ?.components(separatedBy: CharacterSet.whitespaces).filter({ !$0.isEmpty })
         
-        let url = worker?.createURL(withParameterQ: requestModel.parameterQ, andParameterOffset: requestModel.parameterOffset)
+        if let words = parametersQ {
+            for word in words {
+                if parameterQ.count == 0 {
+                    parameterQ = word
+                } else {
+                    parameterQ = parameterQ + "+" + word
+                }
+            }
+        }
+        
+        let url = worker?.createURL(withParameterQ: parameterQ, andParameterOffset: requestModel.parameterOffset)
         
         worker?.fetchGIFObjects(witURL: url!, completionHandler: { (responseObject) in
             let responseModel = GIFObjectsShowModels.FetchGIFObjects.ResponseModel(responseObject: responseObject!)

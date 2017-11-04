@@ -32,7 +32,7 @@ enum GIFObjectsShowModels {
                 let url: String
             }
             
-            let displayedGIFObjects: [DisplayedGIFObject]?
+            let displayedGIFObjects: [ObjectGIF]?
         }
     }
 }

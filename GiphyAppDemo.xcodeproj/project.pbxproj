@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B103A74F1FAC97A600CD0D2F /* Objects+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B103A74D1FAC97A600CD0D2F /* Objects+CoreDataClass.swift */; };
-		B103A7501FAC97A600CD0D2F /* Objects+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B103A74E1FAC97A600CD0D2F /* Objects+CoreDataProperties.swift */; };
 		B13B3E831FAB7A1100009D84 /* GiphyAppModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B13B3E811FAB7A1100009D84 /* GiphyAppModel.xcdatamodeld */; };
 		B16C6AEB1FAB287500BA3D7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C6AEA1FAB287500BA3D7F /* AppDelegate.swift */; };
 		B16C6AF21FAB287500BA3D7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B16C6AF11FAB287500BA3D7F /* Assets.xcassets */; };
@@ -38,6 +36,8 @@
 		B1ABB2981FAC6B5900BED3BD /* PropertyObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1ABB2971FAC6B5900BED3BD /* PropertyObject.swift */; };
 		B1ABB29C1FAC723F00BED3BD /* ResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1ABB29B1FAC723F00BED3BD /* ResponseObject.swift */; };
 		B1DD0A0E1FACF244001972CA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1DD0A0D1FACF244001972CA /* CoreDataManager.swift */; };
+		B1DD0A131FAD54A7001972CA /* ObjectGIF+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1DD0A111FAD54A7001972CA /* ObjectGIF+CoreDataClass.swift */; };
+		B1DD0A141FAD54A7001972CA /* ObjectGIF+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1DD0A121FAD54A7001972CA /* ObjectGIF+CoreDataProperties.swift */; };
 		F35491E627C3AAF57B6362DE /* Pods_GiphyAppDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BA0E5396D3A4D5347FD2F56 /* Pods_GiphyAppDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,8 +45,6 @@
 		12A33162187DF324314445DD /* Pods-GiphyAppDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GiphyAppDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GiphyAppDemo/Pods-GiphyAppDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		2BA0E5396D3A4D5347FD2F56 /* Pods_GiphyAppDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GiphyAppDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		429B80270ED08042008D161C /* Pods-GiphyAppDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GiphyAppDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-GiphyAppDemo/Pods-GiphyAppDemo.release.xcconfig"; sourceTree = "<group>"; };
-		B103A74D1FAC97A600CD0D2F /* Objects+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Objects+CoreDataClass.swift"; sourceTree = "<group>"; };
-		B103A74E1FAC97A600CD0D2F /* Objects+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Objects+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B13B3E821FAB7A1100009D84 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		B16C6AE71FAB287500BA3D7F /* GiphyAppDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GiphyAppDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B16C6AEA1FAB287500BA3D7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +76,8 @@
 		B1ABB2971FAC6B5900BED3BD /* PropertyObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyObject.swift; sourceTree = "<group>"; };
 		B1ABB29B1FAC723F00BED3BD /* ResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseObject.swift; sourceTree = "<group>"; };
 		B1DD0A0D1FACF244001972CA /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		B1DD0A111FAD54A7001972CA /* ObjectGIF+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObjectGIF+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B1DD0A121FAD54A7001972CA /* ObjectGIF+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObjectGIF+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,8 +122,8 @@
 		B13B3E841FAB7AF400009D84 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B103A74D1FAC97A600CD0D2F /* Objects+CoreDataClass.swift */,
-				B103A74E1FAC97A600CD0D2F /* Objects+CoreDataProperties.swift */,
+				B1DD0A111FAD54A7001972CA /* ObjectGIF+CoreDataClass.swift */,
+				B1DD0A121FAD54A7001972CA /* ObjectGIF+CoreDataProperties.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -402,10 +402,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1ABB2891FAC595400BED3BD /* UIViewController+Extension.swift in Sources */,
-				B103A7501FAC97A600CD0D2F /* Objects+CoreDataProperties.swift in Sources */,
 				B171B25A1FAB6A8500948E5E /* GIFObjectShowModels.swift in Sources */,
 				B1ABB29C1FAC723F00BED3BD /* ResponseObject.swift in Sources */,
 				B1ABB28C1FAC616200BED3BD /* Connectivity.swift in Sources */,
+				B1DD0A141FAD54A7001972CA /* ObjectGIF+CoreDataProperties.swift in Sources */,
 				B1ABB2961FAC6B0000BED3BD /* ImageObject.swift in Sources */,
 				B171B25B1FAB6A8500948E5E /* GIFObjectShowViewController.swift in Sources */,
 				B1ABB2981FAC6B5900BED3BD /* PropertyObject.swift in Sources */,
@@ -413,8 +413,8 @@
 				B171B2481FAB551800948E5E /* GIFObjectsShowModels.swift in Sources */,
 				B171B2461FAB551800948E5E /* GIFObjectsShowWorker.swift in Sources */,
 				B171B2591FAB6A8500948E5E /* GIFObjectShowRouter.swift in Sources */,
+				B1DD0A131FAD54A7001972CA /* ObjectGIF+CoreDataClass.swift in Sources */,
 				B1ABB2921FAC695C00BED3BD /* GIFObject.swift in Sources */,
-				B103A74F1FAC97A600CD0D2F /* Objects+CoreDataClass.swift in Sources */,
 				B16C6AEB1FAB287500BA3D7F /* AppDelegate.swift in Sources */,
 				B171B2581FAB6A8500948E5E /* GIFObjectShowWorker.swift in Sources */,
 				B171B25C1FAB6A8500948E5E /* GIFObjectShowInteractor.swift in Sources */,

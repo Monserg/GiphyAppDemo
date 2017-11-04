@@ -31,21 +31,32 @@ class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
 
     // MARK: - Presentation Logic implementation
     func presentGIFObjects(fromResponseModel responseModel: GIFObjectsShowModels.FetchGIFObjects.ResponseModel) {
-        var objects: [GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject] = []
+        var ids: [String]?
+        var predicate: NSPredicate?
 
         for objectGIF in responseModel.responseObject.data {
             let object = GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject.init(id: objectGIF.id,
                                                                                                 username: objectGIF.username,
                                                                                                 url: objectGIF.url)
             
-            objects.append(object)
+            if ids == nil {
+                ids = [objectGIF.id]
+            } else {
+                ids?.append(objectGIF.id)
+            }
+            
+            // CoreData CRUD: update
+            coreDataManager.entityUpdate(fromGIFObject: object)
+        }
+
+        coreDataManager.contextSave()
+        
+        // CoreData CRUD: read
+        if ids != nil {
+            predicate = NSPredicate(format: "id IN %@", ids!)
         }
         
-        // Save data to CoreData
-//        coreDataManager.objectsGIFSave(fromData: NSKeyedArchiver.archivedData(withRootObject: objects))
-
-        // Read data from CoreData
-        let objectsGIF = coreDataManager.objectsGIFRead()
+        let objectsGIF = coreDataManager.entitiesRead(withPredicateParameters: predicate)
         
         let viewModel = GIFObjectsShowModels.FetchGIFObjects.ViewModel(displayedGIFObjects: objectsGIF)
         viewController?.displayFetchGIFObjects(fromViewModel: viewModel)

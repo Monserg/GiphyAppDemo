@@ -18,4 +18,5 @@ http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=YOUR_API_KEY
 10. create models
 11. create displayed model
 12. add collection header
-13.
+13. update data in CoreData
+14.

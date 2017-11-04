@@ -13,15 +13,7 @@ class CoreDataManager {
     // MARK: - Properties. CoreDate Stack
     var modelName: String
     var sqliteName: String
-    var options: NSDictionary?
-    
-    var objectsEntity: Objects! {
-        set {}
-        
-        get {
-            return self.entityObjectsRead()
-        }
-    }
+    var options: NSDictionary?    
 
     var description: String {
         return "context: \(managedObjectContext)\n" + "modelName: \(modelName)" +
@@ -87,18 +79,8 @@ class CoreDataManager {
     
     
     // MARK: - Class Functions
-    // Save changes
-    func objectsGIFSave(fromData data: Data) {
-        objectsEntity.data = data as NSData
-        contextSave()
-    }
-
-    func objectsGIFRead() -> [GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject]? {
-        return NSKeyedUnarchiver.unarchiveObject(with: objectsEntity.data! as Data) as? [GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject]
-    }
-
     // Save context
-    fileprivate func contextSave() {
+    func contextSave() {
         if managedObjectContext.hasChanges {
             do {
                 try managedObjectContext.save()
@@ -113,20 +95,38 @@ class CoreDataManager {
     
     
     // MARK: - CRUD
-    // Read Entity Object
-    fileprivate func entityObjectsRead() -> Objects? {
+    // Entity Read
+    func entitiesRead(withPredicateParameters predicate: NSPredicate?) -> [ObjectGIF]? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ObjectGIF")
+        fetchRequest.predicate = predicate
+
         do {
-            let results = try managedObjectContext.fetch(NSFetchRequest<NSFetchRequestResult>(entityName: "Objects"))
-            
-            return (results.count == 0) ? entityObjectsCreate() : results.first as! Objects
+            return try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest) as? [ObjectGIF]
         } catch {
             print(error)
             return nil
         }
     }
+    
+    // Entity Update
+    func entityUpdate(fromGIFObject object: GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject) {
+        do {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ObjectGIF")
+            fetchRequest.predicate = NSPredicate.init(format: "id == %@", object.id)
 
-    fileprivate func entityObjectsCreate() -> Objects {
-        return NSEntityDescription.insertNewObject(forEntityName: "Objects", into: managedObjectContext) as! Objects
+            let results = try managedObjectContext.fetch(fetchRequest)
+            let entityObjectGIF = (results.count == 0) ? entityCreate() : results.first as! ObjectGIF
+            entityObjectGIF.id = object.id
+            
+//            contextSave()
+        } catch {
+            print(error)
+        }
+    }
+
+    // Entity Create
+    fileprivate func entityCreate() -> ObjectGIF {
+        return NSEntityDescription.insertNewObject(forEntityName: "ObjectGIF", into: managedObjectContext) as! ObjectGIF
     }
 
 /*
