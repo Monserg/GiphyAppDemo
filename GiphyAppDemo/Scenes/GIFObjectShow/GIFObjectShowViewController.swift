@@ -11,20 +11,18 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 // MARK: - Input & Output protocols
 protocol GIFObjectShowDisplayLogic: class {
     func displaySomething(viewModel: GIFObjectShowModels.Something.ViewModel)
 }
 
-class GIFObjectShowViewController: UIViewController {
+class GIFObjectShowViewController: AVPlayerViewController {
     // MARK: - Properties
     var interactor: GIFObjectShowBusinessLogic?
     var router: (NSObjectProtocol & GIFObjectShowRoutingLogic & GIFObjectShowDataPassing)?
-    
-    
-    // MARK: - IBOutlets
-    @IBOutlet weak var imageView: UIImageView!
     
     
     // MARK: - Object lifecycle
@@ -43,10 +41,10 @@ class GIFObjectShowViewController: UIViewController {
     
     // MARK: - Setup
     private func setup() {
-        let viewController  =   self
-        let interactor      =   GIFObjectShowInteractor()
-        let presenter       =   GIFObjectShowPresenter()
-        let router          =   GIFObjectShowRouter()
+        let viewController          =   self
+        let interactor              =   GIFObjectShowInteractor()
+        let presenter               =   GIFObjectShowPresenter()
+        let router                  =   GIFObjectShowRouter()
         
         viewController.interactor   =   interactor
         viewController.router       =   router
@@ -73,15 +71,23 @@ class GIFObjectShowViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewSettingsDidLoad()
+        navigationItem.title = NSLocalizedString("Preview", comment: "Preview title")
+        videoPresent()
+//        viewSettingsDidLoad()
     }
     
     
     // MARK: - Custom Functions
     func viewSettingsDidLoad() {
         let requestModel = GIFObjectShowModels.Something.RequestModel()
-        
         interactor?.doSomething(request: requestModel)
+    }
+    
+    func videoPresent() {
+        if let preview = router?.dataStore?.objectGIF.preview, let movieURL = URL.init(string: preview) {
+            player = AVPlayer(url: movieURL)
+            player?.play()
+        }
     }
 }
 

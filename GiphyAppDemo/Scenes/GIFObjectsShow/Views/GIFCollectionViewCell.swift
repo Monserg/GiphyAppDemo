@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import Kingfisher
 
 class GIFCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
+    @IBOutlet weak var imageView: AnimatedImageView!
     @IBOutlet weak var importDateTimeLabel: UILabel!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
 }

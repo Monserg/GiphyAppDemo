@@ -11,6 +11,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 // MARK: - Input & Output protocols
 protocol GIFObjectsShowDisplayLogic: class {
@@ -32,13 +33,13 @@ class GIFObjectsShowViewController: UIViewController {
     var objectsGIF: [ObjectGIF]?
 
     // Search
-    var filtered: [String] = []
+    var filtered: [ObjectGIF] = []
     var searchActive: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
     
     // Pagination (0 - to start & clean datasource)
     var paginationOffset = 0
-    
+    var paginationPage = 0
     
     // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView! {
@@ -49,6 +50,7 @@ class GIFObjectsShowViewController: UIViewController {
     }
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var imageView: UIImageView!
     
     
     // MARK: - Object lifecycle
@@ -99,7 +101,6 @@ class GIFObjectsShowViewController: UIViewController {
         
         searchControllerCreate()
         loadObjectsGIF()
-//        fetchGIFObjects()
     }
     
     
@@ -145,10 +146,10 @@ class GIFObjectsShowViewController: UIViewController {
         spinner.startAnimating()
         
         DispatchQueue.main.async {
-            Thread.sleep(forTimeInterval: 0.5)
+            Thread.sleep(forTimeInterval: 0.005)
             
             OperationQueue.main.addOperation() {
-                self.view.isUserInteractionEnabled = false
+//                self.view.isUserInteractionEnabled = false
                 
                 let requestModel = GIFObjectsShowModels.LoadObjectsGIF.RequestModel(objectsCount: self.objectsGIF == nil ? 0 : self.objectsGIF!.count)
                 self.interactor?.loadObjectsGIF(withRequestModel: requestModel)
@@ -165,6 +166,7 @@ class GIFObjectsShowViewController: UIViewController {
             self.view.isUserInteractionEnabled = true
         }
     }
+    
 }
 
 
@@ -182,11 +184,28 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! GIFCollectionViewCell
+        let objectGIF = objectsGIF![indexPath.row]
         
-        //configureCell(cell: cell as! toolCollectionViewCell, forItemAtIndexPath: indexPath as NSIndexPath)
-        
-        cell.importDateTimeLabel.text = objectsGIF![indexPath.row].id
-        
+        cell.spinner.startAnimating()
+        cell.importDateTimeLabel.text = "\(indexPath.row)"
+
+        if let imageURL = objectGIF.fixed_width_small_still {
+            print("\(indexPath.row). \(imageURL)")
+            
+            cell.imageView.kf.setImage(with: URL(string: imageURL)!,
+                                  placeholder: nil,
+                                  options: [.transition(ImageTransition.fade(1)),
+                                            .processor(ResizingImageProcessor(referenceSize: cell.imageView.frame.size,
+                                                                              mode: .aspectFill))],
+                                  completionHandler: { image, error, cacheType, imageURL in
+                                    cell.imageView.kf.cancelDownloadTask()
+                                    cell.spinner.stopAnimating()
+            })
+        } else {
+            cell.imageView.image = UIImage.init(named: "no-image-3")
+            cell.spinner.stopAnimating()
+        }
+
         return cell
     }
 }
@@ -195,13 +214,14 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension GIFObjectsShowViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        router?.routeToGIFObjectShow()
+        router?.routeToGIFObjectShow(objectGIF: objectsGIF![indexPath.row])
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == objectsGIF!.count - 2 && objectsGIF!.count % paginationLimit == 0 {
+        if indexPath.row == objectsGIF!.count - 2 && objectsGIF!.count % paginationLimit == paginationPage {
             print("HELLO SERGEY!!!")
             loadObjectsGIF()
+            paginationPage += 1
         }
     }
 }
@@ -242,12 +262,15 @@ extension GIFObjectsShowViewController: UISearchControllerDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         let searchString = searchController.searchBar.text
         
-//        filtered = items.filter({ (item) -> Bool in
-//            let countryText: NSString = item as NSString
-//            return (countryText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
-//        })
-        
-        collectionView.reloadData()
+        if let items = objectsGIF {
+            filtered = items.filter({ (item) -> Bool in
+                let countryText: NSString = item.id as NSString
+                
+                return (countryText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
+            })
+            
+            collectionView.reloadData()
+        }
     }
 }
 

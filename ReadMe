@@ -20,4 +20,4 @@ http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=YOUR_API_KEY
 12. add collection header
 13. update data in CoreData
 14. load data from CoreData
-15.
+15. add media player

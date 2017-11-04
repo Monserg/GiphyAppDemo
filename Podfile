@@ -9,5 +9,6 @@ target 'GiphyAppDemo' do
     pod 'Crashlytics', '~> 3.9'
     pod 'Alamofire', '~> 4.5'
     pod 'PercentEncoder', '~> 1.1'
+    pod 'Kingfisher', '~> 4.2'
     
 end

@@ -30,6 +30,8 @@ enum GIFObjectsShowModels {
                 let id: String
                 let username: String?
                 let url: String
+                let fixed_width_small_still: String?
+                let preview: String?
             }
             
             let displayedGIFObjects: [ObjectGIF]?

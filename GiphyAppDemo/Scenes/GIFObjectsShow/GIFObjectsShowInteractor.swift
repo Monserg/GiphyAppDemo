@@ -19,7 +19,7 @@ protocol GIFObjectsShowBusinessLogic {
 }
 
 protocol GIFObjectsShowDataStore {
-    var objectsGIF: [String]? { get }
+    var objectsGIF: [ObjectGIF]? { get }
 }
 
 class GIFObjectsShowInteractor: GIFObjectsShowBusinessLogic, GIFObjectsShowDataStore {
@@ -27,7 +27,7 @@ class GIFObjectsShowInteractor: GIFObjectsShowBusinessLogic, GIFObjectsShowDataS
     var presenter: GIFObjectsShowPresentationLogic?
     var worker: GIFObjectsShowWorker?
 
-    var objectsGIF: [String]?
+    var objectsGIF: [ObjectGIF]?
     
     
     // MARK: - Business logic implementation

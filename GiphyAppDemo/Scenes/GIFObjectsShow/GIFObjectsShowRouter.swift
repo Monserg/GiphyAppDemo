@@ -14,7 +14,7 @@ import UIKit
 
 // MARK: - Input & Output protocols
 @objc protocol GIFObjectsShowRoutingLogic {
-    func routeToGIFObjectShow()
+    func routeToGIFObjectShow(objectGIF: ObjectGIF)
 }
 
 protocol GIFObjectsShowDataPassing {
@@ -28,11 +28,11 @@ class GIFObjectsShowRouter: NSObject, GIFObjectsShowRoutingLogic, GIFObjectsShow
     
     
     // MARK: - Routing
-    func routeToGIFObjectShow() {
+    func routeToGIFObjectShow(objectGIF: ObjectGIF) {
         let storyboard = UIStoryboard(name: "GIFObjectShow", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "GIFObjectShowVC") as! GIFObjectShowViewController
         var destinationDS = destinationVC.router!.dataStore!
-        passDataToGIFObjectShow(source: dataStore!, destination: &destinationDS)
+        passDataToGIFObjectShow(objectGIF: objectGIF, destination: &destinationDS)
         navigateToIFObjectShow(source: viewController!, destination: destinationVC)
     }
     
@@ -44,8 +44,7 @@ class GIFObjectsShowRouter: NSObject, GIFObjectsShowRoutingLogic, GIFObjectsShow
     
     
     // MARK: - Passing data
-    func passDataToGIFObjectShow(source: GIFObjectsShowDataStore, destination: inout GIFObjectShowDataStore) {
-        let selectedRow = (viewController?.collectionView.indexPathsForSelectedItems![0])!.row
-        destination.objectGIF = source.objectsGIF?[selectedRow]
+    func passDataToGIFObjectShow(objectGIF: ObjectGIF, destination: inout GIFObjectShowDataStore) {
+        destination.objectGIF = objectGIF
     }
 }

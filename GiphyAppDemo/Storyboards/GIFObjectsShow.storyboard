@@ -41,23 +41,37 @@
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1" translatesAutoresizingMaskIntoConstraints="NO" id="7Wf-Ux-pnB">
+                                                    <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aj1-09-Cie">
                                                     <rect key="frame" x="5" y="124" width="140" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="wGl-ch-Sdx">
+                                                    <rect key="frame" x="65" y="65" width="20" height="20"/>
+                                                    <color key="color" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="1" green="0.84313725490000002" blue="0.42352941179999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="7Wf-Ux-pnB" secondAttribute="trailing" id="8qP-7V-ERM"/>
+                                            <constraint firstItem="wGl-ch-Sdx" firstAttribute="centerY" secondItem="dWG-pc-Pay" secondAttribute="centerY" id="A9l-te-Gki"/>
+                                            <constraint firstAttribute="bottom" secondItem="7Wf-Ux-pnB" secondAttribute="bottom" id="EaI-AG-Prc"/>
+                                            <constraint firstItem="7Wf-Ux-pnB" firstAttribute="top" secondItem="dWG-pc-Pay" secondAttribute="top" id="P70-8X-Dpf"/>
+                                            <constraint firstItem="7Wf-Ux-pnB" firstAttribute="leading" secondItem="dWG-pc-Pay" secondAttribute="leading" id="RWP-MQ-rT5"/>
                                             <constraint firstAttribute="bottom" secondItem="Aj1-09-Cie" secondAttribute="bottom" constant="5" id="ZdI-mE-O7K"/>
                                             <constraint firstItem="Aj1-09-Cie" firstAttribute="leading" secondItem="dWG-pc-Pay" secondAttribute="leading" constant="5" id="cAK-oT-Lnv"/>
                                             <constraint firstItem="Aj1-09-Cie" firstAttribute="centerX" secondItem="dWG-pc-Pay" secondAttribute="centerX" id="f0y-fB-0Na"/>
+                                            <constraint firstItem="wGl-ch-Sdx" firstAttribute="centerX" secondItem="dWG-pc-Pay" secondAttribute="centerX" id="jKd-s9-lQa"/>
                                             <constraint firstAttribute="trailing" secondItem="Aj1-09-Cie" secondAttribute="trailing" constant="5" id="sSp-o2-d8q"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="imageView" destination="7Wf-Ux-pnB" id="gEP-QI-5SH"/>
                                             <outlet property="importDateTimeLabel" destination="Aj1-09-Cie" id="7PH-gj-goA"/>
+                                            <outlet property="spinner" destination="wGl-ch-Sdx" id="idX-A7-T8x"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -124,4 +138,7 @@
             <point key="canvasLocation" x="-442" y="182"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="1" width="240" height="99"/>
+    </resources>
 </document>

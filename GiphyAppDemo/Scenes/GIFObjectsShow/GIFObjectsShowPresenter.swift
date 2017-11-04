@@ -50,7 +50,9 @@ class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
         for objectGIF in responseModel.responseObject.data {
             let object = GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject.init(id: objectGIF.id,
                                                                                                 username: objectGIF.username,
-                                                                                                url: objectGIF.url)
+                                                                                                url: objectGIF.url,
+                                                                                                fixed_width_small_still: (objectGIF.images.fixed_width_small_still?.url)!,
+                                                                                                preview: (objectGIF.images.preview?.mp4)!)
             
             if ids == nil {
                 ids = [objectGIF.id]
