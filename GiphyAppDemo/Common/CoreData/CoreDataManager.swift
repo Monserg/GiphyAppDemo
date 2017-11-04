@@ -119,8 +119,11 @@ class CoreDataManager {
             entityObjectGIF.id = object.id
             entityObjectGIF.username = object.username
             entityObjectGIF.url = object.url
+            entityObjectGIF.fixed_width = object.fixed_width
             entityObjectGIF.fixed_width_small_still = object.fixed_width_small_still
             entityObjectGIF.preview = object.preview
+            entityObjectGIF.slug = object.slug
+            entityObjectGIF.searchText = object.searchText
         } catch {
             print(error)
         }
@@ -130,98 +133,4 @@ class CoreDataManager {
     fileprivate func entityCreate() -> ObjectGIF {
         return NSEntityDescription.insertNewObject(forEntityName: "ObjectGIF", into: managedObjectContext) as! ObjectGIF
     }
-
-/*
-    func entityForName(_ entityName: String) -> NSEntityDescription? {
-        return NSEntityDescription.entity(forEntityName: entityName, in: self.managedObjectContext)
-    }
-    
-    func fetchedResultsController(_ entityName: String, keyForSort: String) -> NSFetchedResultsController<NSFetchRequestResult> {
-        let fetchRequest                =   NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-        let sortDescriptor              =   NSSortDescriptor(key: keyForSort, ascending: true)
-        fetchRequest.sortDescriptors    =   [sortDescriptor]
-        
-        let fetchedResultsController    =   NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                       managedObjectContext: managedObjectContext,
-                                                                       sectionNameKeyPath: nil,
-                                                                       cacheName: nil)
-        
-        return fetchedResultsController
-    }
-
-    // Get Entity by name
-    fileprivate func entityDidLoad(byName name: String, andPredicateParameters predicate: NSPredicate?) -> NSManagedObject? {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult>!
-        
-        if (predicate == nil) {
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-        } else {
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-            fetchRequest.predicate = predicate
-        }
-        
-        do {
-            let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
-            
-            return (results.count == 0) ? self.entityDidCreate(byName: name) : results.first as? NSManagedObject
-        } catch {
-            print(error)
-            
-            return nil
-        }
-    }
-
-    func entitiesDidLoad(byName name: String, andPredicateParameters predicate: NSPredicate?) -> [NSManagedObject]? {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult>!
-
-        if (predicate == nil) {
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-        } else {
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-            fetchRequest.predicate = predicate
-        }
-        
-        do {
-            return try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject]
-        } catch {
-            print(error)
-            return nil
-        }
-    }
-
-    func entityBy(_ name: String, andCodeID codeID: String) -> NSManagedObject? {
-        return CoreDataManager.instance.entityDidLoad(byName: name, andPredicateParameters: NSPredicate.init(format: "codeID = %@", codeID))
-    }
-
-    fileprivate func entityDidCreate(byName name: String) -> NSManagedObject? {
-        let newEntity = NSEntityDescription.insertNewObject(forEntityName: name, into: self.managedObjectContext)
-        
-        return newEntity
-    }
-    
-    func entitiesDidRemove(byName name: String, andPredicateParameters predicate: NSPredicate?) {
-        guard Connectivity.isNetworkAvailable() else {
-            return
-        }
-        
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult>!
-
-        if (predicate == nil) {
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-        } else {
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-            fetchRequest.predicate = predicate
-        }
-        
-        do {
-            let fetchedEntities = try self.managedObjectContext.fetch(fetchRequest)
-            
-            for entity in fetchedEntities {
-                self.managedObjectContext.delete(entity as! NSManagedObject)
-            }
-        } catch {
-            print(error)
-        }
-    }
- */
 }

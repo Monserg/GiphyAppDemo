@@ -54,7 +54,10 @@ class GIFObjectsShowInteractor: GIFObjectsShowBusinessLogic, GIFObjectsShowDataS
         let url = worker?.createURL(withParameterQ: parameterQ, andParameterOffset: requestModel.parameterOffset)
         
         worker?.fetchGIFObjects(witURL: url!, completionHandler: { (responseObject) in
-            let responseModel = GIFObjectsShowModels.FetchGIFObjects.ResponseModel(responseObject: responseObject!)
+            let responseModel = GIFObjectsShowModels.FetchGIFObjects.ResponseModel(countMax: (responseObject?.pagination.total_count)!,
+                                                                                   searchText: parameterQ,
+                                                                                   responseObject: responseObject!)
+            
             self.presenter?.presentGIFObjects(fromResponseModel: responseModel)
         })
     }

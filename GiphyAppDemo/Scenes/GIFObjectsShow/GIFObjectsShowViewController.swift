@@ -36,10 +36,13 @@ class GIFObjectsShowViewController: UIViewController {
     var filtered: [ObjectGIF] = []
     var searchActive: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
+    var searchText = ""
     
     // Pagination (0 - to start & clean datasource)
     var paginationOffset = 0
     var paginationPage = 0
+    var countMax: Int32 = 0
+    
     
     // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView! {
@@ -135,8 +138,7 @@ class GIFObjectsShowViewController: UIViewController {
             
             OperationQueue.main.addOperation() {
                 self.view.isUserInteractionEnabled = false
-                let requestModel = GIFObjectsShowModels.FetchGIFObjects.RequestModel(parameterQ: self.searchController.searchBar.text,
-                                                                                     parameterOffset: self.paginationOffset)
+                let requestModel = GIFObjectsShowModels.FetchGIFObjects.RequestModel(parameterQ: self.searchText, parameterOffset: self.paginationOffset)
                 self.interactor?.fetchGIFObjects(withRequestModel: requestModel)
             }
         }
@@ -149,8 +151,6 @@ class GIFObjectsShowViewController: UIViewController {
             Thread.sleep(forTimeInterval: 0.005)
             
             OperationQueue.main.addOperation() {
-//                self.view.isUserInteractionEnabled = false
-                
                 let requestModel = GIFObjectsShowModels.LoadObjectsGIF.RequestModel(objectsCount: self.objectsGIF == nil ? 0 : self.objectsGIF!.count)
                 self.interactor?.loadObjectsGIF(withRequestModel: requestModel)
             }
@@ -189,12 +189,12 @@ extension GIFObjectsShowViewController: UICollectionViewDataSource {
         cell.spinner.startAnimating()
         cell.importDateTimeLabel.text = "\(indexPath.row)"
 
-        if let imageURL = objectGIF.fixed_width_small_still {
+        if let imageURL = objectGIF.fixed_width {
             print("\(indexPath.row). \(imageURL)")
             
             cell.imageView.kf.setImage(with: URL(string: imageURL)!,
                                   placeholder: nil,
-                                  options: [.transition(ImageTransition.fade(1)),
+                                  options: [.transition(ImageTransition.fade(1)), .cacheOriginalImage,
                                             .processor(ResizingImageProcessor(referenceSize: cell.imageView.frame.size,
                                                                               mode: .aspectFill))],
                                   completionHandler: { image, error, cacheType, imageURL in
@@ -218,9 +218,8 @@ extension GIFObjectsShowViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == objectsGIF!.count - 2 && objectsGIF!.count % paginationLimit == paginationPage {
-            print("HELLO SERGEY!!!")
-            loadObjectsGIF()
+        if indexPath.row == objectsGIF!.count - 2 && objectsGIF!.count % paginationLimit == 0 && indexPath.row < countMax - 2 {
+            (searchText.isEmpty) ? loadObjectsGIF() : fetchGIFObjects()
             paginationPage += 1
         }
     }
@@ -264,7 +263,7 @@ extension GIFObjectsShowViewController: UISearchControllerDelegate {
         
         if let items = objectsGIF {
             filtered = items.filter({ (item) -> Bool in
-                let countryText: NSString = item.id as NSString
+                let countryText: NSString = item.slug as NSString
                 
                 return (countryText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
             })
@@ -279,6 +278,7 @@ extension GIFObjectsShowViewController: UISearchControllerDelegate {
 extension GIFObjectsShowViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
+        searchText = ""
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -288,8 +288,12 @@ extension GIFObjectsShowViewController: UISearchBarDelegate {
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchText = searchBar.text!
         searchActive = false
+        searchController.isActive = false
+        objectsGIF = []
         fetchGIFObjects()
+        paginationPage = 0
     }
 
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
@@ -314,12 +318,14 @@ extension GIFObjectsShowViewController: GIFObjectsShowDisplayLogic {
     // From CoreData
     func displayLoadObjectsGIF(fromViewModel viewModel: GIFObjectsShowModels.LoadObjectsGIF.ViewModel) {
         // NOTE: Display the result from the Presenter
+        countMax = viewModel.countMax
         refreshObjectsGIF(fromArray: viewModel.displayedGIFObjects)
     }
 
     // From Server
     func displayFetchGIFObjects(fromViewModel viewModel: GIFObjectsShowModels.FetchGIFObjects.ViewModel) {
         // NOTE: Display the result from the Presenter
+        countMax = viewModel.countMax
         refreshObjectsGIF(fromArray: viewModel.displayedGIFObjects)
     }
 }

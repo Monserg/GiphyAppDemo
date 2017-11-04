@@ -34,31 +34,28 @@ class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
     func presentObjectsGIF(fromResponseModel responseModel: GIFObjectsShowModels.LoadObjectsGIF.ResponseModel) {
         // CoreData CRUD: read
         var objectsGIF = coreDataManager.entitiesRead(withPredicateParameters: nil)
+        let countMax: Int32 = Int32((objectsGIF?.count)!)
         
         if objectsGIF != nil {
             objectsGIF = Array(objectsGIF!.prefix(responseModel.objectsCount + paginationLimit))
         }
         
-        let viewModel = GIFObjectsShowModels.LoadObjectsGIF.ViewModel(displayedGIFObjects: objectsGIF)
+        let viewModel = GIFObjectsShowModels.LoadObjectsGIF.ViewModel(countMax: countMax, displayedGIFObjects: objectsGIF)
         viewController?.displayLoadObjectsGIF(fromViewModel: viewModel)
     }
 
     func presentGIFObjects(fromResponseModel responseModel: GIFObjectsShowModels.FetchGIFObjects.ResponseModel) {
-        var ids: [String]?
         var predicate: NSPredicate?
 
         for objectGIF in responseModel.responseObject.data {
             let object = GIFObjectsShowModels.FetchGIFObjects.ViewModel.DisplayedGIFObject.init(id: objectGIF.id,
                                                                                                 username: objectGIF.username,
                                                                                                 url: objectGIF.url,
+                                                                                                fixed_width: (objectGIF.images.fixed_width?.url)!,
                                                                                                 fixed_width_small_still: (objectGIF.images.fixed_width_small_still?.url)!,
-                                                                                                preview: (objectGIF.images.preview?.mp4)!)
-            
-            if ids == nil {
-                ids = [objectGIF.id]
-            } else {
-                ids?.append(objectGIF.id)
-            }
+                                                                                                preview: (objectGIF.images.preview?.mp4)!,
+                                                                                                slug: objectGIF.slug,
+                                                                                                searchText: responseModel.searchText!)
             
             // CoreData CRUD: update
             coreDataManager.entityUpdate(fromGIFObject: object)
@@ -67,13 +64,10 @@ class GIFObjectsShowPresenter: GIFObjectsShowPresentationLogic {
         coreDataManager.contextSave()
         
         // CoreData CRUD: read
-        if ids != nil {
-            predicate = NSPredicate(format: "id IN %@", ids!)
-        }
-        
+        predicate = NSPredicate(format: "searchText == %@", responseModel.searchText!)        
         let objectsGIF = coreDataManager.entitiesRead(withPredicateParameters: predicate)
         
-        let viewModel = GIFObjectsShowModels.FetchGIFObjects.ViewModel(displayedGIFObjects: objectsGIF)
+        let viewModel = GIFObjectsShowModels.FetchGIFObjects.ViewModel(countMax: responseModel.countMax, displayedGIFObjects: objectsGIF)
         viewController?.displayFetchGIFObjects(fromViewModel: viewModel)
     }
 }

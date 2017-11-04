@@ -11,4 +11,5 @@ import Foundation
 struct ResponseObject: Decodable {
     let data: [GIFObject]
     let meta: MetaObject
+    let pagination: Pagination
 }

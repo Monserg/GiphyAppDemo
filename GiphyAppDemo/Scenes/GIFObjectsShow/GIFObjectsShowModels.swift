@@ -22,6 +22,8 @@ enum GIFObjectsShowModels {
         }
         
         struct ResponseModel {
+            let countMax: Int32
+            let searchText: String?
             let responseObject: ResponseObject
         }
         
@@ -30,10 +32,14 @@ enum GIFObjectsShowModels {
                 let id: String
                 let username: String?
                 let url: String
+                let fixed_width: String?
                 let fixed_width_small_still: String?
                 let preview: String?
+                let slug: String
+                let searchText: String
             }
             
+            let countMax: Int32
             let displayedGIFObjects: [ObjectGIF]?
         }
     }
@@ -48,6 +54,7 @@ enum GIFObjectsShowModels {
         }
         
         struct ViewModel {
+            let countMax: Int32
             let displayedGIFObjects: [ObjectGIF]?
         }
     }

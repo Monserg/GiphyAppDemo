@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="17B48" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ObjectGIF" representedClassName="ObjectGIF" syncable="YES">
+        <attribute name="fixed_width" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fixed_width_small_still" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" attributeType="String" defaultValueString="0" syncable="YES"/>
         <attribute name="preview" optional="YES" attributeType="String" defaultValueString="http://" syncable="YES"/>
+        <attribute name="searchText" attributeType="String" defaultValueString="XXX" syncable="YES"/>
+        <attribute name="slug" attributeType="String" defaultValueString="slug" syncable="YES"/>
         <attribute name="url" attributeType="String" defaultValueString="http://" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <uniquenessConstraints>
@@ -13,6 +16,6 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="ObjectGIF" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="ObjectGIF" positionX="-63" positionY="-18" width="128" height="165"/>
     </elements>
 </model>
